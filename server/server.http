@@ -1,0 +1,16 @@
+@server_HostAddress = http://localhost:5161
+
+GET {{server_HostAddress}}/host/id
+Accept: application/json
+
+###
+
+GET {{server_HostAddress}}/clicks
+Accept: application/json
+
+###
+
+POST {{server_HostAddress}}/clicks
+Accept: application/json
+
+###
