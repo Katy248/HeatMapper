@@ -2,11 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Text */
+h1 {
+    @apply text-center text-9xl font-bold text-transparent bg-clip-text from-yellow-400 via-violet-700 to-red-400 bg-gradient-to-br;
+}
+
 /* Controls */
 input,
 button,
-a {
-    @apply p-3 m-1 hover:bg-slate-200 rounded-lg
+a,
+select {
+    @apply p-3 m-1 hover:bg-slate-200 rounded-lg delay-100 duration-150;
+}
+
+option {
+    @apply bg-slate-600 text-slate-100 first:rounded-t-lg last:rounded-b-lg;
 }
 
 body {
@@ -14,38 +24,43 @@ body {
 }
 
 button,
-input[type=button] {
+input[type="button"] {
     @apply p-5 hover:bg-slate-300;
 }
 
 a {
-    @apply text-blue-300 underline hover:via-violet-400;
+    @apply text-blue-300 underline hover:text-violet-400;
 }
 
-input[type=text] {
+input[type="text"],
+select {
     @apply border-2 border-slate-400;
 }
 
+.special {
+    @apply from-yellow-400 via-violet-700 to-red-400 hover:to-red-400 bg-gradient-to-br text-slate-100 font-bold text-xl hover:text-amber-300 hover:via-violet-800;
+}
+
 .warm {
-    @apply border-collapse border-8 border-spacing-0 border-dotted
+    @apply border-collapse border-8 border-spacing-0 border-dotted;
 }
 
 .warm-0 {
-    @apply bg-blue-400 border-blue-700
+    @apply bg-blue-400 border-blue-700;
 }
 
 .warm-1 {
-    @apply bg-green-400 border-green-700
+    @apply bg-green-400 border-green-700;
 }
 
 .warm-2 {
-    @apply bg-yellow-400 border-yellow-700
+    @apply bg-yellow-400 border-yellow-700;
 }
 
 .warm-3 {
-    @apply bg-orange-400 border-orange-700
+    @apply bg-orange-400 border-orange-700;
 }
 
 .warm-4 {
-    @apply bg-red-400 border-red-700
+    @apply bg-red-400 border-red-700;
 }
