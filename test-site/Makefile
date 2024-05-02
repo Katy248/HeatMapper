@@ -11,7 +11,7 @@ run: build
 clear:
 	rm -rf $(OUTPUT_DIR)
 
-$(OUTPUT_DIR)/mapper.js: $(SOURCE_DIR)/mapper.js $(OUTPUT_DIR)
+$(OUTPUT_DIR)/mapper.js: ../client/mapper.js $(OUTPUT_DIR)
 	cp $< $@
 
 $(OUTPUT_DIR)/index.html: $(SOURCE_DIR)/index.html $(OUTPUT_DIR)
