@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 
 
@@ -29,18 +30,24 @@ if (app.Environment.IsDevelopment())
 app.UseCors(CorsPolicyName);
 app.UseHttpsRedirection();
 
-var clicks = new List<ClickInfo>();
-var hosts = new List<HostInfo>();
+var _clicks = new List<ClickInfo>();
+var _hosts = new List<HostInfo>();
 
-app.MapPost("/clicks", ([FromBody] ClickInfo info) => { clicks.Add(info); });
+app.MapPost("/clicks", ([FromBody] ClicksData data) =>
+{
+    foreach (var click in data.Clicks) 
+    {
+        _clicks.Add(new (data.HostId, click.ElementId, click.Date));
+    }
+});
 app.MapGet("/clicks",
-    ([FromBody] GetClicksRequest request) => { return clicks.Where(c => c.HostId == request.HostId); });
+    ([FromBody] GetClicksRequest request) => { return _clicks.Where(c => c.HostId == request.HostId); });
 app.MapGet("/host/id", async Task<IdInfo> (HttpContext context) =>
 {
     var baseUrl = context.Request.Host;
     // var basePath = context.Request.Path;
 
-    var host = hosts.FirstOrDefault(h => h.Uri == baseUrl.ToString());
+    var host = _hosts.FirstOrDefault(h => h.Uri == baseUrl.ToString());
 
     if (host is not null)
     {
@@ -48,17 +55,19 @@ app.MapGet("/host/id", async Task<IdInfo> (HttpContext context) =>
     }
 
     var newHost = new HostInfo(Guid.NewGuid().ToString(), baseUrl.ToString());
-    hosts.Add(newHost);
+    _hosts.Add(newHost);
 
     return new IdInfo(newHost.Id, baseUrl.ToString());
 });
 
 app.Run();
 
+record ClickData(string ElementId, DateTime Date);
+record ClicksData(string HostId, IEnumerable<ClickData> Clicks);
 record GetClicksRequest(string HostId);
 
 record IdInfo(string Id, string Url);
 
 record HostInfo(string Id, string Uri);
 
-record ClickInfo(string HostId, string ElementId, int Clicks, DateTime Date);
+record ClickInfo(string HostId, string ElementId, DateTime Date);
