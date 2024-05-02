@@ -6,7 +6,10 @@ all:
 build: $(OUTPUT_DIR)/index.html $(OUTPUT_DIR)/mapper.js $(OUTPUT_DIR)/style.css
 	
 run: build
+	go get .
 	go run server.go
+run-ws: build
+	npx ws --cors.origin "*" --cors.allow-methods "*" --log.format dev
 
 clear:
 	rm -rf $(OUTPUT_DIR)
