@@ -1,10 +1,19 @@
 const _host = "http://localhost:5161";
+// const _cors = "https://cors-anywhere.herokuapp.com/";
 const heatGetIdUrl = _host + "/host/id";
 const heatSendClicksUrl = _host + "/clicks";
 
 const sendData = (data) => {
+    console.debug(data);
     const body = JSON.stringify(data);
-    fetch(heatSendClicksUrl, { body: body, method: "POST" })
+    console.debug(body);
+    fetch(heatSendClicksUrl, {
+        body: body,
+        method: "POST",
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+        },
+    })
         .then((res) => {
             console.log(res);
         })
@@ -13,30 +22,29 @@ const sendData = (data) => {
         });
 };
 
-const getHostId = () => {
-    let id;
-    fetch(heatGetIdUrl)
-        .then((res) => {
-            return res.json();
-        })
-        .then((data) => {
-            id = data.id;
-        })
-        .catch((err) => {
-            console.error(err);
-        });
-    return id;
+const getHostId = async () => {
+    const result = await fetch(heatGetIdUrl);
+    const data = await result.json();
+    return data.id;
 };
+let heatHostId;
+getHostId()
+    .then((id) => {
+        heatHostId = id;
+        console.debug(heatHostId);
+    })
+    .catch((err) => {
+        console.error(err);
+    });
 
 let heatClicks = [];
 const addClick = (elementId) => {
+    console.debug(elementId);
     heatClicks.push({
         id: elementId,
         date: new Date(),
     });
 };
-
-const heatHostId = getHostId();
 
 let heatControls = document.querySelectorAll("button, a, input, select");
 let heatControlsIdCounter = 0;
@@ -69,7 +77,7 @@ heatControls.forEach((control) => {
     ensureControlHasId(control);
 
     control.addEventListener("click", (event) => {
-        addClick(event.elementId);
+        addClick(event.target.id);
         heatNotifyClicks();
         console.log(`Clicked #${control.id} control`);
     });
